@@ -1,0 +1,36 @@
+;; entry point
+(def determine-order (task-list target-tasks)
+  (determine-order-recurse task-list target-tasks []))
+
+;; recursive helper method that actually does the work
+(def determine-order-recurse (tasks current-tasks dependencies)
+  (if (= 0 (get current-tasks 'length))
+    dependencies
+    (do
+      (var next-task (current-tasks.shift))
+      (determine-order-recurse tasks
+                               (add-new-tasks tasks current-tasks next-task)
+                               (add-dependency dependencies next-task)))))
+
+;; returns the dependency list from the master task list
+(def get-dependencies (tasks task)
+  (get 
+    (get 
+      (tasks.filter (#(item) (= (get item 'task) task))) 
+    0) 
+  'depends))
+
+;; returns a new task-list by adding any new tasks from task to the current-tasks list
+(def add-new-tasks (tasks current-tasks task)
+  (var new-tasks (current-tasks.slice))
+  (each (t) (get-dependencies tasks task)
+    (new-tasks.push t))
+  new-tasks)
+
+;; returns a new dependency list by adding new-dependency to dependencies
+;; specifically, removes the dependency if it already exists then adds it to
+;; the beginning of the list
+(def add-dependency (dependencies new-dependency)
+  (var result (dependencies.filter (#(x) (!= x new-dependency))))
+  (result.unshift new-dependency)
+  result)

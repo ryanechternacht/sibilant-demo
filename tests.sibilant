@@ -1,0 +1,25 @@
+;; (determine-order crossbeam-test ["make a sandwich"])
+;; output => [ 'go to the store', 'buy groceries', 'make a sandwich' ]
+(var crossbeam-test 
+  [{task "make a sandwich", depends ["buy groceries"]}
+   {task "buy groceries", depends ["go to the store"]}
+   {task "go to the store", depends []}])
+
+;; (determine-order multi-path-test ["a"])
+;; legal output => [e/d c b a]
+;; expected output => [d e c b a]
+(var multi-path-test
+  [{task "a" depends ["b" "d"]}
+   {task "b" depends ["c" "e"]}
+   {task "c" depends ["d"]}
+   {task "d" depends []}
+   {task "e" depends []}])
+
+;; (determine-order multi-start-test ["a" "c"])
+;; legal output => [b/d a/c]
+;; expected output => [d b c a]
+(var multi-start-test
+  [{task "a" depends ["b"]}
+   {task "b" depends []}
+   {task "c" depends ["d"]}
+   {task "d" depends []}])

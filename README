@@ -1,0 +1,13 @@
+My solution is a recursively implmented breadth first search (mostly, because I didn't
+know how to implement a while loop in sibilant). I used functional programming/clojure 
+style funcs that return new copies of the data structures they implement. 
+
+I left some comments on the functions to outline what they do. In general, we have a list
+of dependencies to process (that starts as the ones supplied to `determine-order`). 
+As we process dependencies, we add them to our final set, add their dependencies onto 
+our list to process, and recurse. Eventually, we have no more dependencies to process
+and we return our final set. 
+
+I say "final set" but that's a bit misleading. It's really a stack/set combo. A stack
+in the sense that it's LIFO. A set in the sense that only one copy of an element
+exists at a time and when an element is added, any existing copies are first deleted.
